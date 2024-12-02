@@ -60,8 +60,8 @@ export const channelsService = {
 
   async filterNonMembers(
     channelId: string,
-    users: Array<{ id: string }>
-  ): Promise<Array<{ id: string }>> {
+    users: Array<{ id: string, username: string; avatarUrl: string; }>
+  ): Promise<Array<{ id: string, username: string; avatarUrl: string; }>> {
     const { data: members, error } = await supabase
       .from('channel_members')
       .select('user_id')
@@ -82,8 +82,6 @@ export const channelsService = {
         p_user_id: userId,
       }
     );
-
-    console.log({ data });
     if (error) {
       throw new Error('Failed to fetch channels');
     }

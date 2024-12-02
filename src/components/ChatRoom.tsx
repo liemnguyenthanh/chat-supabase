@@ -56,8 +56,7 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ onLogout }) => {
           'postgres_changes',
           { event: 'INSERT', schema: 'public', table: 'messages' },
           async (payload) => {
-            const newMessage = payload.new as any;
-
+            const newMessage = payload.new
             // Fetch user details for the new message
             const { data: userData, error: userError } = await supabase
               .from('users')
@@ -149,8 +148,8 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ onLogout }) => {
       id: msg.id,
       content: msg.content,
       userId: msg.user_id,
-      username: msg.users.username,
-      avatarUrl: msg.users.avatar_url,
+      username: msg.users?.[0].username || 'unknown',
+      avatarUrl: msg.users?.[0].avatar_url || 'unknown',
       channelId: msg.channel_id,
       type: msg.type,
       createdAt: msg.created_at,

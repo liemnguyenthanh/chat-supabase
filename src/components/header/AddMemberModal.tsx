@@ -33,7 +33,7 @@ export const AddMemberModal: React.FC<AddMemberModalProps> = ({
       const results = await userService.searchUsers(searchQuery);
       // Filter out current user and existing members
       const filteredResults = await channelsService.filterNonMembers(channelId, results);
-      setSearchResults(filteredResults);
+      if (filteredResults) setSearchResults(filteredResults);
     } catch (error) {
       toast.error('Failed to search users');
     } finally {
