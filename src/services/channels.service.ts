@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { Channel } from '../types/chat';
+import { getGravatarUrl } from '../utils/gravatar';
 
 export const channelsService = {
   async createChannel(
@@ -89,7 +90,7 @@ export const channelsService = {
     return data.map((channel) => ({
       id: channel.channel_id,
       title: channel.channel_title,
-      avatarUrl: channel.channel_avatar_url,
+      avatarUrl: channel.channel_avatar_url || getGravatarUrl(channel.channel_id),
       lastMessage: channel.last_message_content,
       lastMessageAt: channel.last_message_created_at,
       unreadCount: Number(channel.unread_count),

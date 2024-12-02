@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChatRoom } from './components/ChatRoom';
 import { Toaster } from 'react-hot-toast';
 import { AuthModal } from './components/auth/AuthModal';

@@ -36,3 +36,18 @@ export interface MessageAttachment {
   fileType: string;
   fileName: string;
 }
+
+export interface DatabaseMessage {
+  id: string;
+  content: string;
+  user_id: string;
+  channel_id: string;
+  type: string;
+  created_at: string;
+  is_edited: boolean;
+  is_deleted: boolean;
+  users: {
+    username: string | null;
+    avatar_url: string | null;
+  };
+}

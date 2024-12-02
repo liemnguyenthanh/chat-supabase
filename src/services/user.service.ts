@@ -17,5 +17,22 @@ export const userService = {
       username: user.username,
       avatarUrl: user.avatar_url
     }));
+  },
+
+  async updateProfile(userId: string, updates: { username?: string }) {
+    const { error } = await supabase
+      .from('users')
+      .update({
+        username: updates.username,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', userId);
+
+    if (error) {
+      if (error.code === '23505') {
+        throw new Error('Username already taken');
+      }
+      throw new Error('Failed to update profile');
+    }
   }
 };

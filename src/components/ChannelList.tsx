@@ -37,7 +37,7 @@ export const ChannelList: React.FC<ChannelListProps> = ({
                 : 'hover:bg-gray-700'
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex gap-2">
               {channel.avatarUrl && (
                 <img
                   src={channel.avatarUrl}
@@ -47,7 +47,7 @@ export const ChannelList: React.FC<ChannelListProps> = ({
               )}
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-baseline">
-                  <span className="font-medium truncate"># {channel.title}</span>
+                  <span className="font-medium truncate">{channel.title}</span>
                   {channel.unreadCount > 0 && (
                     <span className="bg-blue-500 text-xs px-2 py-1 rounded-full">
                       {channel.unreadCount}

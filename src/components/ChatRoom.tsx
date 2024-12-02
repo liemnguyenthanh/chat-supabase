@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from '../lib/supabase';
-import { Message, Channel } from '../types/chat';
+import { Message, Channel, DatabaseMessage } from '../types/chat';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { ChannelList } from './ChannelList';
@@ -9,6 +9,7 @@ import { ChatRoomHeader } from './header/ChatRoomHeader';
 import { channelsService } from '../services/channels.service';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
+import { ProfileSection } from './profile/ProfileSection';
 
 interface ChatRoomProps {
   onLogout: () => void;
@@ -130,7 +131,7 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ onLogout }) => {
         created_at,
         is_edited,
         is_deleted,
-        users (
+        users(
           username,
           avatar_url
         )
@@ -144,14 +145,14 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ onLogout }) => {
       return;
     }
 
-    const formattedMessages = data.map((msg) => ({
+    const formattedMessages: Message[] = (data as unknown as DatabaseMessage[]).map((msg) => ({
       id: msg.id,
       content: msg.content,
       userId: msg.user_id,
-      username: msg.users?.[0].username || 'unknown',
-      avatarUrl: msg.users?.[0].avatar_url || 'unknown',
+      username: msg.users.username || 'unknown',
+      avatarUrl: msg.users.avatar_url || 'unknown',
       channelId: msg.channel_id,
-      type: msg.type,
+      type: msg.type as Message['type'],
       createdAt: msg.created_at,
       isEdited: msg.is_edited,
       isDeleted: msg.is_deleted,
@@ -195,19 +196,20 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ onLogout }) => {
 
   return (
     <div className="flex h-screen">
-      <ChannelList
-        channels={channels}
-        activeChannel={activeChannel}
-        onChannelSelect={setActiveChannel}
-        onCreateChannelClick={() => setIsCreateModalOpen(true)}
-      />
-
+      <div className="w-64 bg-gray-800 flex flex-col">
+        <ChannelList
+          channels={channels}
+          activeChannel={activeChannel}
+          onChannelSelect={setActiveChannel}
+          onCreateChannelClick={() => setIsCreateModalOpen(true)}
+        />
+        {user && <ProfileSection user={user} onLogout={onLogout} />}
+      </div>
       <div className="flex-1 flex flex-col">
         <ChatRoomHeader
           channelTitle={activeChannelData?.title || ''}
           channelId={activeChannel}
           isOwner={activeChannelData?.isOwner || false}
-          onLogout={onLogout}
         />
 
         <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
