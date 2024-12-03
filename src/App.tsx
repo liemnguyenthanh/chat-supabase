@@ -1,16 +1,25 @@
+import React from 'react';
 import { ChatRoom } from './components/ChatRoom';
 import { Toaster } from 'react-hot-toast';
 import { AuthModal } from './components/auth/AuthModal';
-import { useAuth } from './hooks/useAuth';
+import { AuthProvider, MessageProvider, useAuthContext } from './contexts';
 
-function App() {
-  const { user, login, logout, isAuthenticated } = useAuth();
+const App = () => {
+  return <AuthProvider>
+    <AppInner />
+  </AuthProvider>
+}
+
+const AppInner = () => {
+  const { login, logout, isAuthenticated } = useAuthContext();
 
   return (
     <div className="h-screen bg-gray-100">
       <Toaster position="top-right" />
       {isAuthenticated ? (
-        <ChatRoom onLogout={logout} />
+        <MessageProvider>
+          <ChatRoom onLogout={logout} />
+        </MessageProvider>
       ) : (
         <AuthModal onAuthSuccess={login} />
       )}

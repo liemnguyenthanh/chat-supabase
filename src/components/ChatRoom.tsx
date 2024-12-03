@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import { Message, Channel, DatabaseMessage } from '../types/chat';
-import { ChatMessage } from './ChatMessage';
+import { ChatMessage } from './message/ChatMessage';
 import { ChatInput } from './ChatInput';
 import { ChannelList } from './ChannelList';
 import { CreateChannelModal } from './CreateChannelModal';
@@ -24,7 +24,6 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ onLogout }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeChannelData = channels.find((c) => c.id === activeChannel);
-  console.log({ activeChannelData });
 
   useEffect(() => {
     if (user) {

@@ -1,6 +1,8 @@
 import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { Message } from '../types/chat';
+import { Message } from '../../types/chat';
+import { usePopup } from '../../hooks/usePopup';
+import { MessageActionPopup } from './MessageActionPopup';
 
 interface ChatMessageProps {
   message: Message;
@@ -15,6 +17,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   onReactionAdd,
   onReactionRemove
 }) => {
+  const { isOpen, position, open, close, popupRef } = usePopup('contextmenu');
+
   const renderContent = () => {
     switch (message.type) {
       case 'text':
@@ -50,7 +54,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   };
 
   return (
-    <div className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4`}>
+    <div
+      className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4`}>
       <div className="flex items-start gap-2 max-w-[70%]">
         <img
           src={message.avatarUrl}
@@ -58,9 +63,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           className="w-8 h-8 rounded-full"
         />
         <div
-          className={`rounded-lg px-4 py-2 ${
-            isOwnMessage ? 'bg-blue-500 text-white' : 'bg-gray-200'
-          }`}
+          onContextMenu={open}
+          className={`rounded-lg px-4 py-2 ${isOwnMessage ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            }`}
         >
           <div className="flex items-baseline gap-2">
             <span className="font-semibold text-sm">
@@ -87,11 +92,10 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                       onReactionAdd?.(reaction.emoji);
                     }
                   }}
-                  className={`text-sm px-2 py-1 rounded-full ${
-                    reaction.users.includes(message.username)
-                      ? 'bg-blue-100 text-blue-600'
-                      : 'bg-gray-100 hover:bg-gray-200'
-                  }`}
+                  className={`text-sm px-2 py-1 rounded-full ${reaction.users.includes(message.username)
+                    ? 'bg-blue-100 text-blue-600'
+                    : 'bg-gray-100 hover:bg-gray-200'
+                    }`}
                 >
                   {reaction.emoji} {reaction.users.length}
                 </button>
@@ -100,6 +104,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           )}
         </div>
       </div>
+
+      {isOpen && <div ref={popupRef}>
+        <MessageActionPopup
+          message={message}
+          position={position}
+          onClose={close}
+        />
+      </div>}
     </div>
   );
 };
