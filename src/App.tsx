@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChatRoom } from './components/ChatRoom';
+import { ChatRoom } from './components/chat-room/ChatRoom';
 import { Toaster } from 'react-hot-toast';
 import { AuthModal } from './components/auth/AuthModal';
 import { AuthProvider, MessageProvider, useAuthContext } from './contexts';

@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { supabase } from '../lib/supabase';
-import { Message, Channel, DatabaseMessage } from '../types/chat';
-import { ChatMessage } from './message/ChatMessage';
-import { ChatInput } from './ChatInput';
-import { ChannelList } from './ChannelList';
-import { CreateChannelModal } from './CreateChannelModal';
-import { ChatRoomHeader } from './header/ChatRoomHeader';
-import { channelsService } from '../services/channels.service';
-import { useAuth } from '../hooks/useAuth';
+import { supabase } from '../../lib/supabase';
+import { Message, Channel, DatabaseMessage } from '../../types/chat';
+import { ChatMessage } from '../messages/ChatMessage'
+import { ChatInput } from '../chat-input/ChatInput';
+import { ChannelList } from '../channels/ChannelList';
+import { CreateChannelModal } from '../create-channel/CreateChannelModal';
+import { ChatRoomHeader } from '../header/ChatRoomHeader';
+import { channelsService } from '../../services/channels.service';
+import { useAuth } from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
-import { ProfileSection } from './profile/ProfileSection';
+import { ProfileSection } from '../profile/ProfileSection';
 
 interface ChatRoomProps {
   onLogout: () => void;
@@ -137,7 +137,9 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ onLogout }) => {
       `
       )
       .eq('channel_id', activeChannel)
-      .order('created_at', { ascending: true });
+      .limit(100)
+      .order('created_at', { ascending: false });
+
 
     if (error) {
       toast.error('Failed to fetch messages');
